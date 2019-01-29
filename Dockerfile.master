@@ -1,12 +1,9 @@
-FROM centos
-MAINTAINER tim@cyface.com
+FROM debian:9
+MAINTAINER cam@root.gg
 
-RUN yum install -y epel-release && \
-    yum install -y --nogpgcheck https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el7.noarch.rpm && \
-    yum update -y && \
-    yum install -y virt-what salt-master && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+RUN apt-get update && apt-get install -y curl
+RUN curl -L https://bootstrap.saltstack.com > /root/bootstrap.sh && chmod +x /root/bootstrap.sh
+RUN sh /root/bootstrap.sh -M -N -X stable
 
 RUN sed -i "s|#auto_accept: False|auto_accept: True|g" /etc/salt/master
 
